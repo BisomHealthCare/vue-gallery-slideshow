@@ -1,71 +1,78 @@
 <template>
   <transition name="modal">
-    <div
-      v-if="imgIndex !== null"
-      class="vgs"
-      @click="close"
-    >
-      <button
-        type="button"
-        class="vgs__close"
-        @click="close"
-      >
-        &times;
-      </button>
-      <button
-        v-if="isMultiple"
-        type="button"
-        class="vgs__prev"
-        @click.stop="onPrev"
-      >
-        &lsaquo;
-      </button>
-      <div
-        v-if="images"
-        class="vgs__container"
-        @click.stop="onNext"
-      >
+    <div v-if="imgIndex !== null" class="vgs" @click="close">
+      <button type="button" class="vgs__close" @click="close">&times;</button>
+      <button v-if="isMultiple" type="button" class="vgs__prev" @click.stop="onPrev">&lsaquo;</button>
+      <div v-if="images" class="vgs__container" @click.stop="onNext">
         <img
-          class="vgs__container__img"
+          :class="
+						`vgs__container__img ${
+							images[this.imgIndex].hasOwnProperty('rotate')
+								? 'rotate' + images[this.imgIndex].rotate
+								: ''
+						}`
+					"
           :src="imageUrl"
           :alt="alt"
           @click.stop="onNext"
-        >
+        />
         <slot></slot>
       </div>
-      <button
-        v-if="isMultiple"
-        type="button"
-        class="vgs__next"
-        @click.stop="onNext"
-      >
-        &rsaquo;
-      </button>
-      <div
-        v-if="isMultiple"
-        ref="gallery"
-        class="vgs__gallery"
-      >
+      <button v-if="isMultiple" type="button" class="vgs__next" @click.stop="onNext">&rsaquo;</button>
+
+      <img
+        v-if="
+					images[this.imgIndex].hasOwnProperty('rotate')
+				"
+        src="../../images/rLeft.png"
+        alt="turn left"
+        class="rotateBtn__left"
+        width="30px"
+        height="30px"
+        @click.stop="rotateL(imgIndex)"
+      />
+      <img
+        v-if="
+					images[this.imgIndex].hasOwnProperty('rotate')
+				"
+        src="../../images/rRight.png"
+        alt="turn right"
+        class="rotateBtn__right"
+        width="30px"
+        height="30px"
+        @click.stop="rotateR(imgIndex)"
+      />
+      <div v-if="isMultiple" ref="gallery" class="vgs__gallery">
+        <div v-if="images" class="vgs__gallery__title">{{ imgIndex + 1 }} / {{ images.length }}</div>
         <div
           v-if="images"
-          class="vgs__gallery__title"
-        >
-          {{ imgIndex + 1 }} / {{ images.length }}
-        </div>
-        <div
-          v-if="images"
-          class="vgs__gallery__container"
-          :style="{ transform: 'translate(' + galleryXPos + 'px, 0)' }"
+          class="vgs__gallery__container`"
+          :style="{
+						transform:
+							'translate(' + galleryXPos + 'px, 0)',
+					}"
         >
           <img
             v-for="(img, i) in images"
             :key="i"
             class="vgs__gallery__container__img"
             :src="typeof img === 'string' ? img : img.url"
-            :class="{ 'vgs__gallery__container__img--active': i === imgIndex}"
+            :class="
+							`${
+								i === imgIndex
+									? 'vgs__gallery__container__img--active'
+									: ''
+							} ${
+								typeof img === 'object' &&
+								img.hasOwnProperty('rotate')
+									? 'rotate' + img.rotate
+									: ''
+							}
+						`
+						"
             :alt="typeof img === 'string' ? '' : img.alt"
             @click.stop="onClickThumb(img, i)"
-          >
+          />
         </div>
       </div>
     </div>
@@ -75,7 +82,7 @@
 <script>
 export default {
   props: {
-    images : {
+    images: {
       type: Array,
       required: true
     },
@@ -97,14 +104,14 @@ export default {
     imageUrl() {
       const img = this.images[this.imgIndex];
       if (typeof img === "string") {
-          return img;
+        return img;
       }
       return img.url;
     },
     alt() {
       const img = this.images[this.imgIndex];
       if (typeof img === "object") {
-          return img.alt;
+        return img.alt;
       }
 
       return "";
@@ -112,6 +119,13 @@ export default {
     isMultiple() {
       return this.images.length > 1;
     }
+    // angle() {
+    // 	if (this.imgIndex !== null) {
+    // 		return this.images[this.imgIndex].rotate;
+    // 	} else {
+    // 		return 0;
+    // 	}
+    // },
   },
   watch: {
     index(val, prev) {
@@ -193,6 +207,36 @@ export default {
         );
       } else {
         this.galleryXPos = -(this.imgIndex * this.thumbnailWidth) + centerPos;
+      }
+    },
+    rotateL(index) {
+      if (this.images[this.imgIndex].rotate === 0) {
+        const newAngle = 3;
+        this.$emit("rotate", {
+          index,
+          newAngle
+        });
+      } else {
+        const newAngle = --this.images[this.imgIndex].rotate;
+        this.$emit("rotate", {
+          index,
+          newAngle
+        });
+      }
+    },
+    rotateR(index) {
+      if (this.images[this.imgIndex].rotate === 3) {
+        const newAngle = 0;
+        this.$emit("rotate", {
+          index,
+          newAngle
+        });
+      } else {
+        const newAngle = ++this.images[this.imgIndex].rotate;
+        this.$emit("rotate", {
+          index,
+          newAngle
+        });
       }
     }
   }
@@ -293,6 +337,7 @@ $screen-md-max: ($screen-lg - 1);
     right: 0;
   }
   &__container {
+    z-index: 5;
     position: absolute;
     overflow: hidden;
     cursor: pointer;
@@ -304,6 +349,8 @@ $screen-md-max: ($screen-lg - 1);
     height: 60vh;
     border-radius: $radius-large;
     background-color: $black;
+    transition: all 0.5s ease-out;
+
     @include respond-to(xs) {
       width: 100%;
       max-width: 100%;
@@ -320,6 +367,11 @@ $screen-md-max: ($screen-lg - 1);
       height: 100%;
       object-fit: contain;
     }
+  }
+  &__container:hover {
+    height: 80vh;
+    max-width: 90vw;
+    transition: all 0.5s ease-out;
   }
 }
 
@@ -373,5 +425,30 @@ $screen-md-max: ($screen-lg - 1);
 
 .modal-leave-active {
   opacity: 0;
+}
+
+.rotateBtn {
+  &__right {
+    margin-right: -50px;
+
+    position: absolute;
+    bottom: 200px;
+    cursor: pointer;
+  }
+  &__left {
+    margin-left: -50px;
+    position: absolute;
+    bottom: 200px;
+    cursor: pointer;
+  }
+}
+.rotate1 {
+  transform: rotate(90deg);
+}
+.rotate2 {
+  transform: rotate(180deg);
+}
+.rotate3 {
+  transform: rotate(270deg);
 }
 </style>
