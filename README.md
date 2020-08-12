@@ -6,7 +6,7 @@ This repository is a fork of [https://github.com/KitchenStories/vue-gallery-slid
 Lightweight and responsive image gallery for Vue.js.
 Here, we add a zoom effect hovering over the image, and the possibility to rotate image.
 
-![](https://github.com/KitchenStories/vue-gallery-slideshow/blob/master/images/demo.gif)
+![](https://github.com/BisomHealthCare/vue-gallery-slideshow/blob/master/images/vue-gallery-slideshow-bisom-health-care.gif)
 
 ## Live Demo
 
