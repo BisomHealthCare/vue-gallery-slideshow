@@ -3,6 +3,7 @@
 # vue-gallery-slideshow-bisom-health-care
 
 This repository is a fork of [https://github.com/KitchenStories/vue-gallery-slideshow](https://github.com/KitchenStories/vue-gallery-slideshow)
+
 Lightweight and responsive image gallery for Vue.js.
 Here, we add a zoom effect hovering over the image, and the possibility to rotate image.
 
