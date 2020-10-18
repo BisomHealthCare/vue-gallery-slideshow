@@ -1,25 +1,28 @@
 <template>
   <transition name="modal">
     <div v-if="imgIndex !== null" class="vgs" @click="close">
-      <button
-        class="rotateBtn__left"
-        @click.stop="rotateL(imgIndex)"
-        v-if="
-					images[this.imgIndex].hasOwnProperty('rotate')
-				"
-      >
-        <RotateLeftIcon />
-      </button>
-      <button
-        class="rotateBtn__right"
-        @click.stop="rotateR(imgIndex)"
-        v-if="
-					images[this.imgIndex].hasOwnProperty('rotate')
-				"
-      >
-        <RotateRightIcon />
-      </button>
-
+      <div class="rotateBtn">
+        <button
+          type="button" 
+          class="rotateBtn__right"
+          @click.stop="rotateR(imgIndex)"
+          v-if="
+            images[this.imgIndex].hasOwnProperty('rotate')
+          "
+        >
+          <RotateRightIcon />
+        </button>
+           <button
+          type="button"
+          class="rotateBtn__left"
+          @click.stop="rotateL(imgIndex)"
+          v-if="
+            images[this.imgIndex].hasOwnProperty('rotate')
+          "
+        >
+          <RotateLeftIcon />
+        </button>
+      </div>
       <button type="button" class="vgs__close" @click="close">&times;</button>
       <button v-if="isMultiple" type="button" class="vgs__prev" @click.stop="onPrev">&lsaquo;</button>
       <div v-if="images" class="vgs__container" @click.stop="onNext">
@@ -37,6 +40,8 @@
         />
         <slot></slot>
       </div>
+      <p class="description">{{imageDescription}}</p>
+
       <button v-if="isMultiple" type="button" class="vgs__next" @click.stop="onNext">&rsaquo;</button>
       <div v-if="isMultiple" ref="gallery" class="vgs__gallery">
         <div v-if="images" class="vgs__gallery__title">{{ imgIndex + 1 }} / {{ images.length }}</div>
@@ -121,14 +126,17 @@ export default {
     },
     isMultiple() {
       return this.images.length > 1;
+    },
+    imageDescription(){
+      if (this.imgIndex || this.imgIndex === 0) {
+        const img = this.images[this.imgIndex];
+        if (img.description) {
+          return img.description;
+        } else { return "" }
+      } else { 
+        return ""
+      }
     }
-    // angle() {
-    // 	if (this.imgIndex !== null) {
-    // 		return this.images[this.imgIndex].rotate;
-    // 	} else {
-    // 		return 0;
-    // 	}
-    // },
   },
   watch: {
     index(val, prev) {
@@ -246,7 +254,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $black-alpha-80: rgba(0, 0, 0, 0.8);
 $black: #000;
 $white: #fff;
@@ -431,23 +439,20 @@ $screen-md-max: ($screen-lg - 1);
 }
 
 .rotateBtn {
+  width: 100vw;
+  position: absolute;
+  bottom: 200px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+
   &__right {
-    background-color: #000;
-    margin-left: -50px;
-    color: #fff;
-    position: absolute;
-    bottom: 200px;
     cursor: pointer;
-    border: $black;
+    padding: 10px;
   }
   &__left {
-    background-color: #000;
-    margin-right: -50px;
-    position: absolute;
-    bottom: 200px;
     cursor: pointer;
-    color: #fff;
-    border: $black;
+    padding: 10px;
   }
 }
 .rotate1 {
@@ -458,5 +463,25 @@ $screen-md-max: ($screen-lg - 1);
 }
 .rotate3 {
   transform: rotate(270deg);
+}
+.description {
+  width: 100%;
+  color: #fff;
+  position: absolute;
+  top: calc(60vh + 20px);
+  text-align: center;
+  background-color: black;
+}
+.mdi-rotate-right-variant::before {
+  content:'';
+  color: $black;
+}
+.mdi-rotate-left-variant::before {
+  content:'';
+  color: $black;
+}
+.mdi::before {
+  content:'';
+  color: $black;
 }
 </style>

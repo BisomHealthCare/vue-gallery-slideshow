@@ -108,6 +108,20 @@ methods: {
 }
 ```
 
+## Adding description under image
+
+If you want to add the possibility to show description under image, you can do by wrapping it in an object and adding an `description`:
+
+```javascript
+data: {
+  images: [
+   { url: 'https://placem.at/places?w=800&h=600&random=1', description: 'my description here' },
+   ...
+  ],
+  index: null
+},
+```
+
 ## Usage with Nuxt.js
 
 When used with server-side rendering frameworks like Nuxt.js, please wrap the component in a `<client-only>` element like shown below:
@@ -141,7 +155,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Author
 
-Norman Sander and edit by Mahieu Laurent
+Norman Sander and contribution of Mahieu Laurent
 
 ## License
 
