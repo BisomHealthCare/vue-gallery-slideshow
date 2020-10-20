@@ -3,55 +3,66 @@
     <div v-if="imgIndex !== null" class="vgs" @click="close">
       <div class="rotateBtn">
         <button
-          type="button" 
+          type="button"
           class="rotateBtn__right"
           @click.stop="rotateR(imgIndex)"
-          v-if="
-            images[this.imgIndex].hasOwnProperty('rotate')
-          "
+          v-if="images[this.imgIndex].hasOwnProperty('rotate')"
         >
           <RotateRightIcon />
         </button>
-           <button
+        <button
           type="button"
           class="rotateBtn__left"
           @click.stop="rotateL(imgIndex)"
-          v-if="
-            images[this.imgIndex].hasOwnProperty('rotate')
-          "
+          v-if="images[this.imgIndex].hasOwnProperty('rotate')"
         >
           <RotateLeftIcon />
         </button>
       </div>
       <button type="button" class="vgs__close" @click="close">&times;</button>
-      <button v-if="isMultiple" type="button" class="vgs__prev" @click.stop="onPrev">&lsaquo;</button>
+      <button
+        v-if="isMultiple"
+        type="button"
+        class="vgs__prev"
+        @click.stop="onPrev"
+      >
+        &lsaquo;
+      </button>
       <div v-if="images" class="vgs__container" @click.stop="onNext">
         <img
           :class="
-						`vgs__container__img ${
-							images[this.imgIndex].hasOwnProperty('rotate')
-								? 'rotate' + images[this.imgIndex].rotate
-								: ''
-						}`
-					"
+            `vgs__container__img ${
+              images[this.imgIndex].hasOwnProperty('rotate')
+                ? 'rotate' + images[this.imgIndex].rotate
+                : ''
+            }`
+          "
           :src="imageUrl"
           :alt="alt"
           @click.stop="onNext"
         />
         <slot></slot>
       </div>
-      <p class="description">{{imageDescription}}</p>
+      <p class="description">{{ imageDescription }}</p>
 
-      <button v-if="isMultiple" type="button" class="vgs__next" @click.stop="onNext">&rsaquo;</button>
+      <button
+        v-if="isMultiple"
+        type="button"
+        class="vgs__next"
+        @click.stop="onNext"
+      >
+        &rsaquo;
+      </button>
       <div v-if="isMultiple" ref="gallery" class="vgs__gallery">
-        <div v-if="images" class="vgs__gallery__title">{{ imgIndex + 1 }} / {{ images.length }}</div>
+        <div v-if="images" class="vgs__gallery__title">
+          {{ imgIndex + 1 }} / {{ images.length }}
+        </div>
         <div
           v-if="images"
           class="vgs__gallery__container`"
           :style="{
-						transform:
-							'translate(' + galleryXPos + 'px, 0)',
-					}"
+            transform: 'translate(' + galleryXPos + 'px, 0)'
+          }"
         >
           <img
             v-for="(img, i) in images"
@@ -59,18 +70,15 @@
             class="vgs__gallery__container__img"
             :src="typeof img === 'string' ? img : img.url"
             :class="
-							`${
-								i === imgIndex
-									? 'vgs__gallery__container__img--active'
-									: ''
-							} ${
-								typeof img === 'object' &&
-								img.hasOwnProperty('rotate')
-									? 'rotate' + img.rotate
-									: ''
-							}
+              `${
+                i === imgIndex ? 'vgs__gallery__container__img--active' : ''
+              } ${
+                typeof img === 'object' && img.hasOwnProperty('rotate')
+                  ? 'rotate' + img.rotate
+                  : ''
+              }
 						`
-						"
+            "
             :alt="typeof img === 'string' ? '' : img.alt"
             @click.stop="onClickThumb(img, i)"
           />
@@ -127,14 +135,16 @@ export default {
     isMultiple() {
       return this.images.length > 1;
     },
-    imageDescription(){
+    imageDescription() {
       if (this.imgIndex || this.imgIndex === 0) {
         const img = this.images[this.imgIndex];
         if (img.description) {
           return img.description;
-        } else { return "" }
-      } else { 
-        return ""
+        } else {
+          return "";
+        }
+      } else {
+        return "";
       }
     }
   },
@@ -470,18 +480,17 @@ $screen-md-max: ($screen-lg - 1);
   position: absolute;
   top: calc(60vh + 20px);
   text-align: center;
-  background-color: black;
 }
 .mdi-rotate-right-variant::before {
-  content:'';
+  content: "";
   color: $black;
 }
 .mdi-rotate-left-variant::before {
-  content:'';
+  content: "";
   color: $black;
 }
 .mdi::before {
-  content:'';
+  content: "";
   color: $black;
 }
 </style>
