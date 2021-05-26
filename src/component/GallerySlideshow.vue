@@ -19,7 +19,13 @@
           <RotateLeftIcon />
         </button>
       </div>
-      <button type="button" class="vgs__close" @click="close">&times;</button>
+      <button
+        type="button"
+        :class="closePositionLeft ? 'vgs__close closeLeft' : 'vgs__close'"
+        @click="close"
+      >
+        &times;
+      </button>
       <button
         v-if="isMultiple"
         type="button"
@@ -30,13 +36,11 @@
       </button>
       <div v-if="images" class="vgs__container" @click.stop="onNext">
         <img
-          :class="
-            `vgs__container__img ${
-              images[this.imgIndex].hasOwnProperty('rotate')
-                ? 'rotate' + images[this.imgIndex].rotate
-                : ''
-            }`
-          "
+          :class="`vgs__container__img ${
+            images[this.imgIndex].hasOwnProperty('rotate')
+              ? 'rotate' + images[this.imgIndex].rotate
+              : ''
+          }`"
           :src="imageUrl"
           :alt="alt"
           @click.stop="onNext"
@@ -61,7 +65,7 @@
           v-if="images"
           class="vgs__gallery__container`"
           :style="{
-            transform: 'translate(' + galleryXPos + 'px, 0)'
+            transform: 'translate(' + galleryXPos + 'px, 0)',
           }"
         >
           <img
@@ -69,16 +73,14 @@
             :key="i"
             class="vgs__gallery__container__img"
             :src="typeof img === 'string' ? img : img.url"
-            :class="
-              `${
-                i === imgIndex ? 'vgs__gallery__container__img--active' : ''
-              } ${
-                typeof img === 'object' && img.hasOwnProperty('rotate')
-                  ? 'rotate' + img.rotate
-                  : ''
-              }
-						`
-            "
+            :class="`${
+              i === imgIndex ? 'vgs__gallery__container__img--active' : ''
+            } ${
+              typeof img === 'object' && img.hasOwnProperty('rotate')
+                ? 'rotate' + img.rotate
+                : ''
+            }
+						`"
             :alt="typeof img === 'string' ? '' : img.alt"
             @click.stop="onClickThumb(img, i)"
           />
@@ -95,25 +97,26 @@ import RotateLeftIcon from "mdi-vue/RotateLeftVariant.vue"; // raw vue component
 export default {
   components: {
     RotateRightIcon,
-    RotateLeftIcon
+    RotateLeftIcon,
   },
   props: {
+    closePositionLeft: Boolean,
     images: {
       type: Array,
-      required: true
+      required: true,
     },
     index: {
       type: Number,
       required: false,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
       imgIndex: this.index,
       image: null,
       galleryXPos: 0,
-      thumbnailWidth: 120
+      thumbnailWidth: 120,
     };
   },
   computed: {
@@ -146,7 +149,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   watch: {
     index(val, prev) {
@@ -158,10 +161,10 @@ export default {
           this.updateThumbails();
         });
       }
-    }
+    },
   },
   mounted() {
-    window.addEventListener("keydown", e => {
+    window.addEventListener("keydown", (e) => {
       if (e.keyCode === 37) {
         this.onPrev();
       } else if (e.keyCode === 39) {
@@ -235,13 +238,13 @@ export default {
         const newAngle = 3;
         this.$emit("rotate", {
           index,
-          newAngle
+          newAngle,
         });
       } else {
         const newAngle = --this.images[this.imgIndex].rotate;
         this.$emit("rotate", {
           index,
-          newAngle
+          newAngle,
         });
       }
     },
@@ -250,17 +253,17 @@ export default {
         const newAngle = 0;
         this.$emit("rotate", {
           index,
-          newAngle
+          newAngle,
         });
       } else {
         const newAngle = ++this.images[this.imgIndex].rotate;
         this.$emit("rotate", {
           index,
-          newAngle
+          newAngle,
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -334,6 +337,7 @@ $screen-md-max: ($screen-lg - 1);
       outline: 0;
     }
   }
+
   &__prev,
   &__next {
     position: absolute;
@@ -492,5 +496,8 @@ $screen-md-max: ($screen-lg - 1);
 .mdi::before {
   content: "";
   color: $black;
+}
+.closeLeft {
+  left: 0;
 }
 </style>
