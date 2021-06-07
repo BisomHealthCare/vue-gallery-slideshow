@@ -65,7 +65,7 @@
           v-if="images"
           class="vgs__gallery__container`"
           :style="{
-            transform: 'translate(' + galleryXPos + 'px, 0)',
+            transform: 'translate(' + galleryXPos + 'px, 0)'
           }"
         >
           <img
@@ -97,26 +97,26 @@ import RotateLeftIcon from "mdi-vue/RotateLeftVariant.vue"; // raw vue component
 export default {
   components: {
     RotateRightIcon,
-    RotateLeftIcon,
+    RotateLeftIcon
   },
   props: {
     closePositionLeft: Boolean,
     images: {
       type: Array,
-      required: true,
+      required: true
     },
     index: {
       type: Number,
       required: false,
-      default: null,
-    },
+      default: null
+    }
   },
   data() {
     return {
       imgIndex: this.index,
       image: null,
       galleryXPos: 0,
-      thumbnailWidth: 120,
+      thumbnailWidth: 120
     };
   },
   computed: {
@@ -149,7 +149,7 @@ export default {
       } else {
         return "";
       }
-    },
+    }
   },
   watch: {
     index(val, prev) {
@@ -161,10 +161,10 @@ export default {
           this.updateThumbails();
         });
       }
-    },
+    }
   },
   mounted() {
-    window.addEventListener("keydown", (e) => {
+    window.addEventListener("keydown", e => {
       if (e.keyCode === 37) {
         this.onPrev();
       } else if (e.keyCode === 39) {
@@ -238,13 +238,13 @@ export default {
         const newAngle = 3;
         this.$emit("rotate", {
           index,
-          newAngle,
+          newAngle
         });
       } else {
         const newAngle = --this.images[this.imgIndex].rotate;
         this.$emit("rotate", {
           index,
-          newAngle,
+          newAngle
         });
       }
     },
@@ -253,17 +253,17 @@ export default {
         const newAngle = 0;
         this.$emit("rotate", {
           index,
-          newAngle,
+          newAngle
         });
       } else {
         const newAngle = ++this.images[this.imgIndex].rotate;
         this.$emit("rotate", {
           index,
-          newAngle,
+          newAngle
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
